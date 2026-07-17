@@ -207,9 +207,32 @@ const handleLogin = async (e: React.FormEvent) => {
               rounded-xl
               transition-all
               shadow-lg
+              disabled:opacity-70
+              disabled:cursor-not-allowed
+              flex
+              items-center
+              justify-center
+              gap-2
             "
           >
-            Iniciar sesión
+            {loading ? (
+              <>
+                <span
+                  className="
+                    w-5
+                    h-5
+                    border-2
+                    border-white
+                    border-t-transparent
+                    rounded-full
+                    animate-spin
+                  "
+                />
+                Iniciando sesión...
+              </>
+            ) : (
+              "Iniciar sesión"
+            )}
           </button>
 
         </form>

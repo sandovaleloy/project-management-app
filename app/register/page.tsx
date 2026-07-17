@@ -59,7 +59,7 @@ export default function RegisterPage() {
 
       console.error(error)
 
-      alert("Error del servidor")
+      toast.error("Ocurrió un error inesperado")
 
     } finally {
 
@@ -71,68 +71,153 @@ export default function RegisterPage() {
 
   return (
 
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-
+    <div
+      className="
+        min-h-screen
+        flex
+        items-center
+        justify-center
+        bg-slate-50
+        px-4
+      "
+    >
       <form
         onSubmit={handleRegister}
+        autoComplete="off"
         className="
-          w-96
-          p-6
-          bg-black
-          rounded-lg
-          shadow-lg
+          w-full
+          max-w-md
+
+          bg-violet-100
+
+          border
+          border-slate-200
+
+          rounded-3xl
+
+          shadow-xl
+
+          p-8
         "
       >
 
-        <h1 className="text-2xl font-bold mb-6">
-          Crear Cuenta
-        </h1>
+        <div className="text-center mb-8">
+
+          <h1
+            className="
+              text-4xl
+              font-extrabold
+              text-blue-600
+              tracking-tight
+            "
+          >
+            Crear Cuenta
+          </h1>
+
+         <p
+            className="
+              text-center
+              mt-6
+
+              text-sm
+
+              text-slate-500
+            "
+          >
+            Comienza a gestionar tus proyectos
+          </p>
+
+        </div>
 
         <input
           type="text"
           placeholder="Nombre"
+          autoComplete="name" 
           value={name}
           onChange={(e) =>
             setName(e.target.value)
           }
           className="
             w-full
-            p-2
+
+            p-3
+            placeholder:text-slate-400
+
             border
-            mb-3
-            rounded
+            border-slate-300
+
+            rounded-xl
+
+            bg-white
+
+            outline-none
+
+            focus:border-blue-500
+            focus:ring-2
+            focus:ring-blue-100
+
+            transition
           "
         />
 
         <input
           type="email"
           placeholder="Correo"
+          autoComplete="email"
           value={email}
           onChange={(e) =>
             setEmail(e.target.value)
           }
           className="
             w-full
-            p-2
+
+            p-3
+            placeholder:text-slate-400
             border
-            mb-3
-            rounded
+            border-slate-300
+
+            rounded-xl
+
+            bg-white
+
+            outline-none
+
+            focus:border-blue-500
+            focus:ring-2
+            focus:ring-blue-100
+
+            transition
           "
         />
 
         <input
           type="password"
           placeholder="Contraseña"
+          autoComplete="new-password"
           value={password}
           onChange={(e) =>
             setPassword(e.target.value)
           }
           className="
             w-full
-            p-2
+
+            p-3
+            placeholder:text-slate-400  
             border
-            mb-4
-            rounded
+            border-slate-300
+
+            rounded-xl
+
+            bg-white
+
+            outline-none
+
+            focus:border-blue-500
+            focus:ring-2
+            focus:ring-blue-100
+
+            transition
+            mb-2
           "
         />
 
@@ -141,12 +226,24 @@ export default function RegisterPage() {
           disabled={loading}
           className="
             w-full
-            bg-black
+
+            bg-blue-600
+            hover:bg-blue-700
+
             text-white
-            p-2
-            rounded
-            hover:bg-gray-800
-            disabled:opacity-50
+
+            font-medium
+
+            py-3
+
+            rounded-xl
+
+            shadow-lg
+
+            transition-all
+
+            disabled:opacity-60
+            disabled:cursor-not-allowed
           "
         >
           {loading
@@ -154,7 +251,7 @@ export default function RegisterPage() {
             : "Crear cuenta"}
         </button>
 
-        <p className="text-center mt-4 text-sm">
+        <p className="text-center mt-4 text-sm text-slate-500">
 
           ¿Ya tienes cuenta?{" "}
 

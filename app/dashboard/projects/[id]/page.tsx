@@ -625,11 +625,46 @@ function Column({
 
       {tasks.length === 0 ? (
 
-        <p className="text-gray-500 text-sm">
-          Sin tareas
-        </p>
+        <div
+          className="
+            flex
+            flex-col
+            items-center
+            justify-center
+            text-center
+            py-10
+            px-4
+          "
+        >
 
-      ) : (
+            <div className="text-4xl mb-3">
+              📝
+            </div>
+
+            <h3
+              className="
+                text-white
+                font-semibold
+                text-lg
+              "
+            >
+              No hay tareas
+            </h3>
+
+            <p
+              className="
+                text-slate-400
+                text-sm
+                mt-2
+                max-w-xs
+              "
+            >
+              Crea la primera tarea y comienza a trabajar en este proyecto.
+            </p>
+
+          </div>
+
+        ) : (
 
         <div className="space-y-4">
 

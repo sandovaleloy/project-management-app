@@ -170,7 +170,7 @@ export default function ProjectsPage() {
             p-3
 
             outline-none
-
+            placeholder-slate-400
             focus:ring-2
             focus:ring-blue-200
             focus:border-blue-500

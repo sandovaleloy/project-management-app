@@ -45,6 +45,10 @@ export default function DashboardPage() {
 
   }, [])
 
+  const isFirstProject =
+  stats?.projects === 0 &&
+  stats?.tasks === 0
+
   return (
 
     <div className="max-w-7xl mx-auto">
@@ -265,22 +269,90 @@ export default function DashboardPage() {
 
       </div>
 
-      {/* PROYECTOS */}
+     {/* PROYECTOS */}
 
       <div className="mt-12">
 
-        <h2
-          className="
-            text-2xl
-            font-bold
-            text-slate-900
-            mb-6
-          "
-        >
-          Proyectos recientes
-        </h2>
+        {isFirstProject ? (
 
-        <ProjectsList />
+          <div
+            className="
+              bg-white
+              border
+              border-slate-200
+              rounded-2xl
+              p-10
+              shadow-sm
+              text-center
+            "
+          >
+
+            <div className="text-5xl mb-4">
+              👋
+            </div>
+
+            <h2
+              className="
+                text-2xl
+                font-bold
+                text-slate-900
+              "
+            >
+              ¡Bienvenido a TaskFlow!
+            </h2>
+
+            <p
+              className="
+                mt-3
+                text-slate-500
+                max-w-md
+                mx-auto
+              "
+            >
+              Aún no tienes proyectos.
+              Empieza creando el primero para organizar tu trabajo.
+            </p>
+
+            <Link
+              href="/dashboard/projects"
+              className="
+                inline-flex
+                mt-6
+                px-6
+                py-3
+                rounded-xl
+                bg-blue-600
+                hover:bg-blue-700
+                text-white
+                font-medium
+                transition
+              "
+            >
+              Crear mi primer proyecto
+            </Link>
+
+          </div>
+
+        ) : (
+
+          <>
+
+            <h2
+              className="
+                text-2xl
+                font-bold
+                text-slate-900
+                mb-6
+              "
+            >
+              Proyectos recientes
+            </h2>
+
+            <ProjectsList />
+
+          </>
+
+        )}
 
       </div>
 
