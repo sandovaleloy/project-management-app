@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
+import { TaskStatus } from "@prisma/client"
 import jwt from "jsonwebtoken"
 
 export async function POST(req: Request) {
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
     const task = await prisma.task.create({
       data: {
         title: body.title,
+        status: TaskStatus.TODO,
         projectId: body.projectId
       }
     })
@@ -109,7 +111,7 @@ export async function PATCH(req: Request) {
         id: body.taskId
       },
       data: {
-        completed: body.completed
+        status: body.status as TaskStatus
       }
     })
 

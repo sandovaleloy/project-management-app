@@ -1,71 +1,291 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import ProjectsList from "@/components/projectList"
+import ProjectsList from "@/components/ProjectList"
 import Link from "next/link"
+
+interface Stats {
+  projects: number
+  tasks: number
+  doneTasks: number
+  inProgressTasks: number
+}
 
 export default function DashboardPage() {
 
-  const [stats, setStats] = useState<any>(null)
+  const [stats, setStats] = useState<Stats | null>(null)
 
   useEffect(() => {
 
-    const token = localStorage.getItem("token")
+    const fetchDashboard = async () => {
 
-    fetch("/api/dashboard", {
-      headers: {
-        Authorization: `Bearer ${token}`
+      try {
+
+        const token = localStorage.getItem("token")
+
+        const res = await fetch("/api/dashboard", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+
+        const data = await res.json()
+
+        setStats(data)
+
+      } catch (error) {
+
+        console.log(error)
+
       }
-    })
-      .then(res => res.json())
-      .then(data => setStats(data))
+
+    }
+
+    fetchDashboard()
 
   }, [])
 
-  if (!stats) {
-    return <p className="p-10">Cargando...</p>
-  }
-
   return (
-    <div className="p-10">
 
-      <h1 className="text-3xl font-bold mb-6">
-        Dashboard
-      </h1>
+    <div className="max-w-7xl mx-auto">
+
+      {/* HEADER */}
+
+      <div className="mb-10">
+
+        <h1
+          className="
+            text-4xl
+            md:text-5xl
+            font-extrabold
+            tracking-tight
+            text-slate-900
+          "
+        >
+          Dashboard
+        </h1>
+
+        <p
+          className="
+            text-slate-500
+            mt-2
+            text-lg
+          "
+        >
+          Resumen general de tus proyectos y tareas
+        </p>
+
+      </div>
+
+      {/* CTA */}
 
       <Link
         href="/dashboard/projects"
-        className="bg-black text-white px-4 py-2 rounded"
+        className="
+          inline-flex
+          items-center
+          px-5
+          py-3
+          rounded-xl
+          bg-blue-600
+          hover:bg-blue-700
+          text-white
+          font-medium
+          transition-all
+          shadow-lg
+        "
       >
         Ver proyectos
       </Link>
 
-      <ProjectsList />
-      
-      <div className="grid grid-cols-4 gap-6">
+      {/* STATS */}
 
-        <div className="p-6 shadow rounded-lg">
-          <h2 className="text-gray-500">Projects</h2>
-          <p className="text-3xl font-bold">{stats.projects}</p>
+      <div
+        className="
+          grid
+          grid-cols-1
+          sm:grid-cols-2
+          xl:grid-cols-4
+          gap-6
+          mt-10
+        "
+      >
+
+        <div
+          className="
+            bg-white
+            border
+            border-slate-200
+            rounded-2xl
+            p-6
+            shadow-sm
+            hover:shadow-xl
+            hover:-translate-y-1
+            transition-all
+            duration-300
+          "
+        >
+
+          <h2
+            className="
+              text-slate-500
+              text-sm
+              font-medium
+            "
+          >
+            Proyectos
+          </h2>
+
+          <p
+            className="
+              text-4xl
+              font-extrabold
+              text-slate-900
+              mt-2
+            "
+          >
+            {stats?.projects ?? 0}
+          </p>
+
         </div>
 
-        <div className="p-6 shadow rounded-lg">
-          <h2 className="text-gray-500">Tasks</h2>
-          <p className="text-3xl font-bold">{stats.tasks}</p>
+        <div
+          className="
+            bg-white
+            border
+            border-slate-200
+            rounded-2xl
+            p-6
+            shadow-sm
+            hover:shadow-xl
+            hover:-translate-y-1
+            transition-all
+            duration-300
+          "
+        >
+
+          <h2
+            className="
+              text-slate-500
+              text-sm
+              font-medium
+            "
+          >
+            Tareas
+          </h2>
+
+          <p
+            className="
+              text-4xl
+              font-extrabold
+              text-slate-900
+              mt-2
+            "
+          >
+            {stats?.tasks ?? 0}
+          </p>
+
         </div>
 
-        <div className="p-6 shadow rounded-lg">
-          <h2 className="text-gray-500">Completed</h2>
-          <p className="text-3xl font-bold">{stats.completedTasks}</p>
+        <div
+          className="
+            bg-white
+            border
+            border-slate-200
+            rounded-2xl
+            p-6
+            shadow-sm
+            hover:shadow-xl
+            hover:-translate-y-1
+            transition-all
+            duration-300
+          "
+        >
+
+          <h2
+            className="
+              text-slate-500
+              text-sm
+              font-medium
+            "
+          >
+            Completadas
+          </h2>
+
+          <p
+            className="
+              text-4xl
+              font-extrabold
+              text-green-600
+              mt-2
+            "
+          >
+            {stats?.doneTasks ?? 0}
+          </p>
+
         </div>
 
-        <div className="p-6 shadow rounded-lg">
-          <h2 className="text-gray-500">Pending</h2>
-          <p className="text-3xl font-bold">{stats.pendingTasks}</p>
+        <div
+          className="
+            bg-white
+            border
+            border-slate-200
+            rounded-2xl
+            p-6
+            shadow-sm
+            hover:shadow-xl
+            hover:-translate-y-1
+            transition-all
+            duration-300
+          "
+        >
+
+          <h2
+            className="
+              text-slate-500
+              text-sm
+              font-medium
+            "
+          >
+            En progreso
+          </h2>
+
+          <p
+            className="
+              text-4xl
+              font-extrabold
+              text-blue-600
+              mt-2
+            "
+          >
+            {stats?.inProgressTasks ?? 0}
+          </p>
+
         </div>
 
       </div>
 
+      {/* PROYECTOS */}
+
+      <div className="mt-12">
+
+        <h2
+          className="
+            text-2xl
+            font-bold
+            text-slate-900
+            mb-6
+          "
+        >
+          Proyectos recientes
+        </h2>
+
+        <ProjectsList />
+
+      </div>
+
     </div>
+
   )
+
 }

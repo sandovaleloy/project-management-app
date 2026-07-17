@@ -73,7 +73,7 @@ export default function ProjectsPage() {
   return (
     <div className="p-10 max-w-xl">
 
-      <h1 className="text-2xl font-bold mb-6">
+      <h1 className="text-2xl font-bold mb-6 text-slate-700">
         Mis Proyectos
       </h1>
 

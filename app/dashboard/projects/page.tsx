@@ -8,147 +8,332 @@ export default function ProjectsPage() {
   const [projects, setProjects] = useState<any[]>([])
   const [name, setName] = useState("")
 
-const fetchProjects = async () => {
+  const fetchProjects = async () => {
 
-  const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token")
 
-  const res = await fetch("/api/projects", {
-    headers: {
-      Authorization: `Bearer ${token}`
+    const res = await fetch("/api/projects", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    const data = await res.json()
+
+    if (res.status === 401 || res.status === 500) {
+
+      localStorage.removeItem("token")
+      window.location.href = "/login"
+      return
+
     }
-  })
 
-  const data = await res.json()
-
-  if (res.status === 401 || res.status === 500) {
-
-    localStorage.removeItem("token")
-    window.location.href = "/login"
-    return
+    setProjects(data)
 
   }
-
-  setProjects(data)
-
-}
 
   useEffect(() => {
     fetchProjects()
   }, [])
 
-const createProject = async () => {
+  const createProject = async () => {
 
-  if (!name.trim()) return
+    if (!name.trim()) return
 
-  const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token")
 
-  const res = await fetch("/api/projects", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify({
-      name
+    const res = await fetch("/api/projects", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        name
+      })
     })
-  })
 
-  const data = await res.json()
+    if (res.status === 401) {
 
-  if (res.status === 401) {
+      localStorage.removeItem("token")
+      window.location.href = "/login"
+      return
 
-    localStorage.removeItem("token")
-    window.location.href = "/login"
-    return
-
-  }
-
-  setName("")
-  fetchProjects()
-
-}
-  
-const deleteProject = async (id: string) => {
-
-  const token = localStorage.getItem("token")
-
-  console.log(token)
-
-  const res = await fetch(`/api/projects/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`
     }
-  })
 
-  if (res.status === 401) {
-    localStorage.removeItem("token")
-    window.location.href = "/login"
-    return
+    setName("")
+    fetchProjects()
+
   }
 
-  fetchProjects()
-}
+  const deleteProject = async (
+    id: string
+  ) => {
+
+    const token = localStorage.getItem("token")
+
+    const res = await fetch(
+      `/api/projects/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+
+    if (res.status === 401) {
+
+      localStorage.removeItem("token")
+      window.location.href = "/login"
+      return
+
+    }
+
+    fetchProjects()
+
+  }
 
   return (
 
-    <div className="p-10">
+  <div
+    className="
+      min-h-screen
+      bg-slate-50
+      p-4
+      sm:p-6
+      lg:p-10
+    "
+  >
 
-      <h1 className="text-3xl font-bold mb-6">
-        Mis Proyectos
-      </h1>
+    <div className="max-w-5xl mx-auto">
 
-      {/* Crear proyecto */}
+      {/* HEADER */}
 
-      <div className="flex gap-2 mb-8">
+      <div className="mb-8">
+
+        <h1
+          className="
+            text-3xl
+            sm:text-4xl
+            font-bold
+            text-slate-900
+          "
+        >
+          Mis Proyectos
+        </h1>
+
+        <p
+          className="
+            text-slate-500
+            mt-2
+          "
+        >
+          Organiza y administra todos tus proyectos.
+        </p>
+
+      </div>
+
+      {/* CREAR PROYECTO */}
+
+      <div
+        className="
+          bg-white
+          border
+          border-slate-200
+          rounded-2xl
+          shadow-md
+          p-5
+          mb-8
+
+          flex
+          flex-col
+          sm:flex-row
+
+          gap-3
+        "
+      >
 
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Nuevo proyecto"
-          className="border p-2 rounded w-full"
+
+          className="
+            flex-1
+
+            border
+            border-slate-300
+
+            rounded-xl
+
+            p-3
+
+            outline-none
+
+            focus:ring-2
+            focus:ring-blue-200
+            focus:border-blue-500
+
+            transition
+          "
         />
 
         <button
           onClick={createProject}
-          className="bg-black text-white px-4 rounded"
+          className="
+            w-full
+            sm:w-auto
+
+            px-6
+            py-3
+
+            rounded-xl
+
+            bg-blue-600
+            hover:bg-blue-700
+
+            text-white
+            font-medium
+
+            transition
+          "
         >
-          Crear
+          Crear proyecto
         </button>
 
       </div>
 
-      {/* Lista */}
+      {/* LISTA */}
 
-<div className="grid gap-4">
+      {projects.length === 0 ? (
 
-  {projects.map((project: any) => (
+        <div
+          className="
+            bg-white
+            border
+            border-slate-200
+            rounded-2xl
+            shadow-md
 
-    <div
-      key={project.id}
-      className="p-4 border rounded flex justify-between items-center"
-    >
+            p-12
 
-      <Link
-        href={`/dashboard/projects/${project.id}`}
-        className="hover:underline"
-      >
-        {project.name}
-      </Link>
+            text-center
+          "
+        >
 
-      <button
-        onClick={() => deleteProject(project.id)}
-        className="text-red-500 hover:text-red-700"
-      >
-        Eliminar
-      </button>
+          <div className="text-5xl mb-4">
+            📁
+          </div>
+
+          <h2
+            className="
+              text-xl
+              font-semibold
+              text-slate-800
+            "
+          >
+            No tienes proyectos
+          </h2>
+
+          <p
+            className="
+              text-slate-500
+              mt-2
+            "
+          >
+            Crea tu primer proyecto para comenzar.
+          </p>
+
+        </div>
+
+      ) : (
+
+        <div className="space-y-4">
+
+          {projects.map((project: any) => (
+
+            <div
+              key={project.id}
+
+              className="
+                bg-white
+                border
+                border-slate-200
+
+                rounded-2xl
+
+                shadow-sm
+                hover:shadow-lg
+
+                transition-all
+
+                p-5
+
+                flex
+                flex-col
+                sm:flex-row
+
+                items-start
+                sm:items-center
+
+                justify-between
+
+                gap-4
+              "
+            >
+
+              <Link
+                href={`/dashboard/projects/${project.id}`}
+
+                className="
+                  text-lg
+                  font-semibold
+
+                  text-slate-800
+
+                  hover:text-blue-600
+
+                  transition
+
+                  break-all
+                "
+              >
+                {project.name}
+              </Link>
+
+              <button
+                onClick={() => deleteProject(project.id)}
+
+                className="
+                  px-4
+                  py-2
+
+                  rounded-lg
+
+                  text-red-600
+
+                  hover:bg-red-50
+                  hover:text-red-700
+
+                  transition
+                "
+              >
+                Eliminar
+              </button>
+
+            </div>
+
+          ))}
+
+        </div>
+
+      )}
 
     </div>
 
-  ))}
+  </div>
 
-</div>
+)
 
-    </div>
-  )
 }

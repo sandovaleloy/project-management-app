@@ -4,12 +4,12 @@ import { verifyToken } from "@/lib/auth"
 
 export async function PATCH(
   req: Request,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
 
   try {
 
-    const { id } = await context.params
+    const { id } = await params
 
     const authHeader =
       req.headers.get("authorization") ||
@@ -30,25 +30,27 @@ export async function PATCH(
 
     const task = await prisma.task.updateMany({
       where: {
-        id,
+        id: id,
         project: {
           userId: decoded.userId
         }
       },
       data: {
-        completed: body.completed
+        status: body.status
       }
     })
 
     if (task.count === 0) {
+
       return NextResponse.json(
-        { error: "Tarea no encontrada o no autorizada" },
+        { error: "Tarea no encontrada" },
         { status: 404 }
       )
+
     }
 
     return NextResponse.json({
-      message: "Tarea actualizada"
+      message: "Estado actualizado"
     })
 
   } catch (error) {

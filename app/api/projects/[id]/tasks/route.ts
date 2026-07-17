@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
+import { TaskStatus, TaskPriority } from "@prisma/client"
 import { verifyToken } from "@/lib/auth"
 
 export async function POST(
@@ -43,15 +44,17 @@ export async function POST(
     }
 
     const task = await prisma.task.create({
-      data: {
-        title: body.title,
-        project: {
-          connect: {
-            id
-          }
-        }
+  data: {
+    title: body.title,
+    status: body.status as TaskStatus,
+    priority: body.priority as TaskPriority,
+    project: {
+      connect: {
+        id
       }
-    })
+    }
+  }
+})
 
     return NextResponse.json(task)
 

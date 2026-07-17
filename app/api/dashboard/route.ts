@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma"
 import jwt from "jsonwebtoken"
 
 export async function GET(req: Request) {
+
   try {
 
     const token = req.headers.get("authorization")?.split(" ")[1]
@@ -22,55 +23,74 @@ export async function GET(req: Request) {
     const userId = decoded.userId
 
     const projects = await prisma.project.count({
-      where: { userId }
+      where: {
+        userId
+      }
     })
 
     const userProjects = await prisma.project.findMany({
-      where: { userId },
-      select: { id: true }
+      where: {
+        userId
+      },
+      select: {
+        id: true
+      }
     })
 
-    const projectIds = userProjects.map(p => p.id)
+    const projectIds = userProjects.map(
+      project => project.id
+    )
 
     if (projectIds.length === 0) {
+
       return NextResponse.json({
         projects: 0,
         tasks: 0,
-        completedTasks: 0,
-        pendingTasks: 0
+        doneTasks: 0,
+        inProgressTasks: 0
       })
+
     }
 
     const tasks = await prisma.task.count({
       where: {
-        projectId: { in: projectIds }
+        projectId: {
+          in: projectIds
+        }
       }
     })
 
-    const completedTasks = await prisma.task.count({
+    const doneTasks = await prisma.task.count({
       where: {
-        projectId: { in: projectIds },
-        completed: true
+        projectId: {
+          in: projectIds
+        },
+        status: "DONE"
       }
     })
 
-    const pendingTasks = await prisma.task.count({
+    const inProgressTasks = await prisma.task.count({
       where: {
-        projectId: { in: projectIds },
-        completed: false
+        projectId: {
+          in: projectIds
+        },
+        status: "IN_PROGRESS"
       }
     })
 
     return NextResponse.json({
       projects,
       tasks,
-      completedTasks,
-      pendingTasks
+      doneTasks,
+      inProgressTasks
     })
 
   } catch (error: any) {
 
-    console.error("ERROR DASHBOARD:", error)
+    console.error(
+      "ERROR DASHBOARD:",
+      error
+    )
 
     return NextResponse.json(
       { error: error.message },
@@ -78,4 +98,5 @@ export async function GET(req: Request) {
     )
 
   }
+
 }

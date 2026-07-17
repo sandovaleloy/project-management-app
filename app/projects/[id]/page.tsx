@@ -6,7 +6,7 @@ import { useParams } from "next/navigation"
 interface Task {
   id: string
   title: string
-  completed: boolean
+  status: string
 }
 
 export default function ProjectTasksPage() {
@@ -65,9 +65,20 @@ export default function ProjectTasksPage() {
 
   }
 
-  const toggleTask = async (taskId: string, completed: boolean) => {
+  const updateTaskStatus = async (
+    taskId: string,
+    currentStatus: string
+  ) => {
 
     const token = localStorage.getItem("token")
+
+    let newStatus = "TODO"
+
+    if (currentStatus === "TODO") {
+      newStatus = "IN_PROGRESS"
+    } else if (currentStatus === "IN_PROGRESS") {
+      newStatus = "DONE"
+    }
 
     await fetch(`/api/tasks/${taskId}`, {
       method: "PATCH",
@@ -76,7 +87,7 @@ export default function ProjectTasksPage() {
         Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
-        completed: !completed
+        status: newStatus
       })
     })
 
@@ -102,6 +113,7 @@ export default function ProjectTasksPage() {
   }
 
   return (
+
     <div className="p-10 max-w-xl">
 
       <h1 className="text-2xl font-bold mb-6">
@@ -127,24 +139,44 @@ export default function ProjectTasksPage() {
       </div>
 
       {tasks.length === 0 ? (
+
         <p>No hay tareas</p>
+
       ) : (
+
         <ul className="space-y-3">
 
           {tasks.map((task) => (
+
             <li
               key={task.id}
               className="border p-3 rounded flex justify-between items-center"
             >
 
-              <span
-                onClick={() => toggleTask(task.id, task.completed)}
+              <div
+                onClick={() =>
+                  updateTaskStatus(task.id, task.status)
+                }
                 className={`cursor-pointer ${
-                  task.completed ? "line-through text-gray-500" : ""
+                  task.status === "DONE"
+                    ? "line-through text-gray-500"
+                    : ""
                 }`}
               >
-                {task.title}
-              </span>
+
+                <div className="flex items-center gap-2">
+
+                  <span>
+                    {task.status === "TODO" && "📝"}
+                    {task.status === "IN_PROGRESS" && "🚧"}
+                    {task.status === "DONE" && "✅"}
+                  </span>
+
+                  <span>{task.title}</span>
+
+                </div>
+
+              </div>
 
               <button
                 onClick={() => deleteTask(task.id)}
@@ -154,9 +186,11 @@ export default function ProjectTasksPage() {
               </button>
 
             </li>
+
           ))}
 
         </ul>
+
       )}
 
     </div>
