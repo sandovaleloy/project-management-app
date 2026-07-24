@@ -71,7 +71,6 @@ export default function ProjectTasksPage() {
 
     } catch (error) {
 
-      console.log(error)
 
       toast.error("Error cargando tareas")
 
@@ -125,8 +124,6 @@ export default function ProjectTasksPage() {
 
     } catch (error) {
 
-      console.log(error)
-
       toast.error("Error creando tarea")
 
     }
@@ -172,8 +169,6 @@ export default function ProjectTasksPage() {
 
     } catch (error) {
 
-      console.log(error)
-
       toast.error("Error actualizando tarea")
 
     }
@@ -211,8 +206,6 @@ export default function ProjectTasksPage() {
       toast.success("Tarea eliminada")
 
     } catch (error) {
-
-      console.log(error)
 
       toast.error("Error eliminando tarea")
 

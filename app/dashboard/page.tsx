@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import ProjectsList from "@/components/ProjectList"
 import Link from "next/link"
+import { toast } from "sonner"
 
 interface Stats {
   projects: number
@@ -35,7 +36,7 @@ export default function DashboardPage() {
 
       } catch (error) {
 
-        console.log(error)
+        toast.error("Error al cargar el dashboard")
 
       }
 

@@ -1,103 +1,89 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 type Task = {
-  id: string
-  title: string
-  completed: boolean
-}
+  id: string;
+  title: string;
+  completed: boolean;
+};
 
 export default function TasksList({ projectId }: { projectId: string }) {
-
-  const [tasks, setTasks] = useState<Task[]>([])
-  const [title, setTitle] = useState("")
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [title, setTitle] = useState("");
 
   const token =
-    typeof window !== "undefined"
-      ? localStorage.getItem("token")
-      : null
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   // Obtener tareas
   async function fetchTasks() {
+    const res = await fetch(`/api/projects/${projectId}/tasks`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    const res = await fetch(
-      `/api/projects/${projectId}/tasks`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
+    const data = await res.json();
 
-    const data = await res.json()
-
-    setTasks(data)
+    setTasks(data);
   }
 
   useEffect(() => {
-    fetchTasks()
-  }, [])
+    fetchTasks();
+  }, []);
 
   // Crear tarea
   async function createTask() {
-
-    if (!title) return
+    if (!title) return;
 
     await fetch(`/api/projects/${projectId}/tasks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ title })
-    })
+      body: JSON.stringify({ title }),
+    });
 
-    setTitle("")
-    fetchTasks()
+    setTitle("");
+    fetchTasks();
   }
 
   // Completar tarea
   async function toggleTask(id: string, completed: boolean) {
-
     await fetch(`/api/tasks/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        completed: !completed
-      })
-    })
+        completed: !completed,
+      }),
+    });
 
-    fetchTasks()
+    fetchTasks();
   }
 
   // Eliminar tarea
   async function deleteTask(id: string) {
-
     await fetch(`/api/tasks/${id}`, {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    fetchTasks()
+    fetchTasks();
   }
 
   return (
     <div className="mt-6">
-
-      <h2 className="text-xl font-bold mb-4">
-        Tasks
-      </h2>
+      <h2 className="text-xl font-bold mb-4">Tasks</h2>
 
       {/* Crear tarea */}
 
       <div className="flex gap-2 mb-4">
-
         <input
           type="text"
           placeholder="Nueva tarea"
@@ -112,40 +98,28 @@ export default function TasksList({ projectId }: { projectId: string }) {
         >
           Crear
         </button>
-
       </div>
 
       {/* Lista */}
 
       <div className="space-y-2">
-
         {tasks.map((task) => (
-
           <div
             key={task.id}
             className="flex justify-between items-center border p-3 rounded"
           >
-
             <div className="flex items-center gap-2">
-
               <input
                 type="checkbox"
                 checked={task.completed}
-                onChange={() =>
-                  toggleTask(task.id, task.completed)
-                }
+                onChange={() => toggleTask(task.id, task.completed)}
               />
 
               <span
-                className={
-                  task.completed
-                    ? "line-through text-gray-400"
-                    : ""
-                }
+                className={task.completed ? "line-through text-gray-400" : ""}
               >
                 {task.title}
               </span>
-
             </div>
 
             <button
@@ -154,13 +128,9 @@ export default function TasksList({ projectId }: { projectId: string }) {
             >
               Delete
             </button>
-
           </div>
-
         ))}
-
       </div>
-
     </div>
-  )
+  );
 }
