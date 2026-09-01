@@ -1,84 +1,79 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 interface Project {
-  id: string
-  name: string
+  id: string;
+  name: string;
 }
 
 export default function ProjectsPage() {
-
-  const [projects, setProjects] = useState<Project[]>([])
-  const [name, setName] = useState("")
-  const [loading, setLoading] = useState(true)
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchProjects()
-  }, [])
+    fetchProjects();
+  }, []);
 
   const fetchProjects = async () => {
-
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
 
     const res = await fetch("/api/projects", {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    const data = await res.json()
+    const data = await res.json();
 
     if (Array.isArray(data)) {
-      setProjects(data)
+      setProjects(data);
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   const createProject = async () => {
+    if (!name.trim()) return;
 
-    if (!name.trim()) return
-
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
 
     const res = await fetch("/api/projects", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        name
-      })
-    })
+        name,
+      }),
+    });
 
     if (res.ok) {
-
-      setName("")
-      fetchProjects()
-
+      setName("");
+      fetchProjects();
     } else {
-
-      alert("Error creando proyecto")
-
+      alert("Error creando proyecto");
     }
-
-  }
+  };
 
   if (loading) {
-    return <div className="p-10">Cargando proyectos...</div>
+    return (
+      <div
+        className="p-10 
+        text-slate-700"
+      >
+        Cargando proyectos...
+      </div>
+    );
   }
 
   return (
     <div className="p-10 max-w-xl">
-
-      <h1 className="text-2xl font-bold mb-6 text-slate-700">
-        Mis Proyectos
-      </h1>
+      <h1 className="text-2xl font-bold mb-6 text-slate-700">Mis Proyectos</h1>
 
       <div className="flex gap-2 mb-6">
-
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -92,7 +87,6 @@ export default function ProjectsPage() {
         >
           Crear
         </button>
-
       </div>
 
       {projects.length === 0 ? (
@@ -101,14 +95,11 @@ export default function ProjectsPage() {
         <ul className="space-y-3">
           {projects.map((p) => (
             <li key={p.id} className="border p-3 rounded">
-              <a href={`/projects/${p.id}`}>
-                {p.name}
-              </a>
+              <a href={`/projects/${p.id}`}>{p.name}</a>
             </li>
           ))}
         </ul>
       )}
-
     </div>
-  )
+  );
 }

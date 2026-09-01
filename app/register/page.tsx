@@ -1,76 +1,59 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { toast } from "sonner"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { toast } from "sonner";
 
 export default function RegisterPage() {
+  const router = useRouter();
 
-  const router = useRouter()
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(false)
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const handleRegister = async (
-    e: React.FormEvent
-  ) => {
-
-    e.preventDefault()
-
-    setLoading(true)
+    setLoading(true);
 
     try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
 
-      const res = await fetch(
-        "/api/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            name,
-            email,
-            password
-          })
-        }
-      )
-
-      const data = await res.json()
+      const data = await res.json();
 
       if (!res.ok) {
+        toast.error(data.error);
 
-        toast.error(data.error)
+        setLoading(false);
 
-        setLoading(false)
-
-        return
-
+        return;
       }
 
-      toast.success("Usuario creado correctamente")
+      toast.success("Usuario creado correctamente");
 
-      router.push("/login")
-
+      router.push("/login");
     } catch (error) {
+      console.error(error);
 
-      console.error(error)
-
-      toast.error("Ocurrió un error inesperado")
-
+      toast.error("Ocurrió un error inesperado");
     } finally {
-
-      setLoading(false)
-
+      setLoading(false);
     }
-
-  }
+  };
 
   return (
-
     <div
       className="
         min-h-screen
@@ -87,22 +70,15 @@ export default function RegisterPage() {
         className="
           w-full
           max-w-md
-
           bg-violet-100
-
           border
           border-slate-200
-
           rounded-3xl
-
           shadow-xl
-
           p-8
         "
       >
-
         <div className="text-center mb-8">
-
           <h1
             className="
               text-4xl
@@ -114,7 +90,7 @@ export default function RegisterPage() {
             Crear Cuenta
           </h1>
 
-         <p
+          <p
             className="
               text-center
               mt-6
@@ -126,37 +102,29 @@ export default function RegisterPage() {
           >
             Comienza a gestionar tus proyectos
           </p>
-
         </div>
 
         <input
           type="text"
           placeholder="Nombre"
-          autoComplete="name" 
+          autoComplete="name"
           value={name}
-          onChange={(e) =>
-            setName(e.target.value)
-          }
+          onChange={(e) => setName(e.target.value)}
           className="
             w-full
-
             p-3
             placeholder:text-slate-400
-
             border
             border-slate-300
-
             rounded-xl
-
             bg-white
-
             outline-none
-
             focus:border-blue-500
             focus:ring-2
             focus:ring-blue-100
-
             transition
+            text-slate-700
+            mb-1
           "
         />
 
@@ -165,28 +133,22 @@ export default function RegisterPage() {
           placeholder="Correo"
           autoComplete="email"
           value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
+          onChange={(e) => setEmail(e.target.value)}
           className="
             w-full
-
             p-3
             placeholder:text-slate-400
             border
             border-slate-300
-
             rounded-xl
-
             bg-white
-
             outline-none
-
             focus:border-blue-500
             focus:ring-2
             focus:ring-blue-100
-
             transition
+            text-slate-700
+            mb-1
           "
         />
 
@@ -195,28 +157,21 @@ export default function RegisterPage() {
           placeholder="Contraseña"
           autoComplete="new-password"
           value={password}
-          onChange={(e) =>
-            setPassword(e.target.value)
-          }
+          onChange={(e) => setPassword(e.target.value)}
           className="
             w-full
-
             p-3
             placeholder:text-slate-400  
             border
             border-slate-300
-
             rounded-xl
-
             bg-white
-
             outline-none
-
             focus:border-blue-500
             focus:ring-2
             focus:ring-blue-100
-
             transition
+            text-slate-700
             mb-2
           "
         />
@@ -226,35 +181,23 @@ export default function RegisterPage() {
           disabled={loading}
           className="
             w-full
-
             bg-blue-600
             hover:bg-blue-700
-
             text-white
-
             font-medium
-
             py-3
-
             rounded-xl
-
             shadow-lg
-
             transition-all
-
             disabled:opacity-60
             disabled:cursor-not-allowed
           "
         >
-          {loading
-            ? "Creando..."
-            : "Crear cuenta"}
+          {loading ? "Creando..." : "Crear cuenta"}
         </button>
 
         <p className="text-center mt-4 text-sm text-slate-500">
-
           ¿Ya tienes cuenta?{" "}
-
           <Link
             href="/login"
             className="
@@ -264,13 +207,8 @@ export default function RegisterPage() {
           >
             Inicia sesión
           </Link>
-
         </p>
-
       </form>
-
     </div>
-
-  )
-
+  );
 }

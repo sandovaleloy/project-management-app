@@ -1,68 +1,54 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { toast } from "sonner"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { toast } from "sonner";
 
 export default function LoginPage() {
+  const router = useRouter();
 
-  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false);
 
-  const [loading, setLoading] = useState(false)
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-const handleLogin = async (e: React.FormEvent) => {
+    setLoading(true);
 
-  e.preventDefault()
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-  setLoading(true)
+      const data = await res.json();
 
-  try {
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
 
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email,
-        password
-      })
-    })
+        toast.success("Bienvenido");
 
-    const data = await res.json()
-
-    if (res.ok) {
-
-      localStorage.setItem("token", data.token)
-
-      toast.success("Bienvenido")
-
-      router.push("/dashboard/projects")
-
-    } else {
-
-      toast.error(data.error)
-
+        router.push("/dashboard/projects");
+      } else {
+        toast.error(data.error);
+      }
+    } catch {
+      toast.error("Ocurrió un error inesperado.");
+    } finally {
+      setLoading(false);
     }
-
-  } catch {
-
-    toast.error("Ocurrió un error inesperado.")
-
-  } finally {
-
-    setLoading(false)
-
-  }
-
-}
+  };
 
   return (
-
     <div
       className="
         min-h-screen
@@ -73,7 +59,6 @@ const handleLogin = async (e: React.FormEvent) => {
         px-4
       "
     >
-
       <div
         className="
           w-full
@@ -86,9 +71,7 @@ const handleLogin = async (e: React.FormEvent) => {
           p-8
         "
       >
-
         <div className="text-center mb-8">
-
           <h1
             className="
               text-4xl
@@ -108,16 +91,10 @@ const handleLogin = async (e: React.FormEvent) => {
           >
             Gestiona tus proyectos y tareas
           </p>
-
         </div>
 
-        <form
-          onSubmit={handleLogin}
-          className="space-y-4"
-        >
-
+        <form onSubmit={handleLogin} className="space-y-4">
           <div>
-
             <label
               className="
                 block
@@ -134,9 +111,7 @@ const handleLogin = async (e: React.FormEvent) => {
               type="email"
               placeholder="correo@ejemplo.com"
               value={email}
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
+              onChange={(e) => setEmail(e.target.value)}
               disabled={loading}
               className="
                 w-full
@@ -152,11 +127,9 @@ const handleLogin = async (e: React.FormEvent) => {
                 bg-white
               "
             />
-
           </div>
 
           <div>
-
             <label
               className="
                 block
@@ -173,9 +146,7 @@ const handleLogin = async (e: React.FormEvent) => {
               type="password"
               placeholder="********"
               value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
+              onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
               className="
                 w-full
@@ -191,7 +162,6 @@ const handleLogin = async (e: React.FormEvent) => {
                 transition
               "
             />
-
           </div>
 
           <button
@@ -234,7 +204,6 @@ const handleLogin = async (e: React.FormEvent) => {
               "Iniciar sesión"
             )}
           </button>
-
         </form>
 
         <p
@@ -245,9 +214,7 @@ const handleLogin = async (e: React.FormEvent) => {
             text-slate-500
           "
         >
-
           ¿No tienes cuenta?{" "}
-
           <Link
             href="/register"
             className="
@@ -258,13 +225,8 @@ const handleLogin = async (e: React.FormEvent) => {
           >
             Regístrate
           </Link>
-
         </p>
-
       </div>
-
     </div>
-
-  )
-
+  );
 }
