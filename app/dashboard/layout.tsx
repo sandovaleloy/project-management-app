@@ -1,25 +1,25 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const router = useRouter()
+  const router = useRouter();
 
   const logout = () => {
-    localStorage.removeItem("token")
+    localStorage.removeItem("token");
 
-    toast.success("Sesión cerrada")
+    toast.success("Sesión cerrada");
 
     setTimeout(() => {
-      router.push("/login")
-    }, 1000)
-  }
+      router.push("/login");
+    }, 1000);
+  };
 
   return (
     <div
@@ -64,9 +64,7 @@ export default function DashboardLayout({
           ⚡ TaskFlow
         </h1>
 
-        <p className="text-slate-400 text-sm mt-1 mb-6">
-          Task Management
-        </p>
+        <p className="text-slate-400 text-sm mt-1 mb-6">Task Management</p>
 
         <nav
           className="
@@ -156,5 +154,5 @@ export default function DashboardLayout({
         {children}
       </main>
     </div>
-  )
+  );
 }
