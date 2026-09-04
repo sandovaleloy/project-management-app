@@ -78,58 +78,191 @@ export default function TasksList({ projectId }: { projectId: string }) {
   }
 
   return (
-    <div className="mt-6">
-      <h2 className="text-xl font-bold mb-4">Tasks</h2>
+    <div className="mt-8 w-full font-[Inter,ui-sans-serif]">
+      {/* HEADER */}
 
-      {/* Crear tarea */}
+      <div className="mb-5">
+        <p className="text-sm font-medium text-[#3B8763] mb-1">Organización</p>
 
-      <div className="flex gap-2 mb-4">
-        <input
-          type="text"
-          placeholder="Nueva tarea"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="border p-2 rounded w-full"
-        />
+        <h2 className="text-2xl sm:text-3xl font-[Fraunces,Georgia,serif] tracking-tight text-[#14231F]">
+          Tareas
+        </h2>
 
-        <button
-          onClick={createTask}
-          className="bg-black text-white px-4 rounded"
-        >
-          Crear
-        </button>
+        <p className="mt-1 text-sm text-[#6B7268]">
+          Mantén tus tareas organizadas y al día.
+        </p>
       </div>
 
-      {/* Lista */}
+      {/* CREAR TAREA */}
 
-      <div className="space-y-2">
-        {tasks.map((task) => (
-          <div
-            key={task.id}
-            className="flex justify-between items-center border p-3 rounded"
+      <div
+        className="
+          rounded-lg
+          border
+          border-[#DDD6C7]
+          bg-white
+          p-5
+          sm:p-6
+        "
+      >
+        <h3 className="text-base font-semibold text-[#1C231F]">Nueva tarea</h3>
+
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+          <input
+            type="text"
+            placeholder="Nueva tarea"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="
+              w-full
+              min-w-0
+              rounded-lg
+              border
+              border-[#DDD6C7]
+              bg-[#FAF7F0]
+              px-4
+              py-3
+              text-sm
+              text-[#1C231F]
+              placeholder:text-[#8B978F]
+              outline-none
+              transition
+              focus:border-[#3B8763]
+              focus:ring-2
+              focus:ring-[#DDE8E1]
+            "
+          />
+
+          <button
+            onClick={createTask}
+            className="
+              w-full
+              sm:w-auto
+              min-w-[110px]
+              rounded-lg
+              bg-[#14231F]
+              px-5
+              py-3
+              text-sm
+              font-medium
+              text-[#F5F2EA]
+              transition-colors
+              hover:bg-[#1C3029]
+            "
           >
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={task.completed}
-                onChange={() => toggleTask(task.id, task.completed)}
-              />
+            Crear tarea
+          </button>
+        </div>
+      </div>
 
-              <span
-                className={task.completed ? "line-through text-gray-400" : ""}
-              >
-                {task.title}
-              </span>
+      {/* LISTA */}
+
+      <div className="mt-6">
+        {tasks.length === 0 ? (
+          <div
+            className="
+              rounded-lg
+              border
+              border-[#DDD6C7]
+              bg-[#F1ECE1]
+              p-8
+              text-center
+            "
+          >
+            <div
+              className="
+                mx-auto
+                flex
+                h-12
+                w-12
+                items-center
+                justify-center
+                rounded-full
+                bg-[#DDE8E1]
+                text-xl
+              "
+            >
+              📝
             </div>
 
-            <button
-              onClick={() => deleteTask(task.id)}
-              className="text-red-500"
-            >
-              Delete
-            </button>
+            <p className="mt-4 text-sm font-medium text-[#14231F]">
+              No hay tareas todavía
+            </p>
+
+            <p className="mt-1 text-sm text-[#6B7268]">
+              Crea una tarea para comenzar.
+            </p>
           </div>
-        ))}
+        ) : (
+          <div className="space-y-3">
+            {tasks.map((task) => (
+              <div
+                key={task.id}
+                className="
+                  flex
+                  flex-col
+                  gap-4
+                  rounded-lg
+                  border
+                  border-[#DDD6C7]
+                  bg-white
+                  p-4
+                  sm:flex-row
+                  sm:items-center
+                  sm:justify-between
+                  sm:p-5
+                  transition-shadow
+                  hover:shadow-sm
+                "
+              >
+                <label className="flex min-w-0 items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={task.completed}
+                    onChange={() => toggleTask(task.id, task.completed)}
+                    className="
+                      h-4
+                      w-4
+                      shrink-0
+                      cursor-pointer
+                      accent-[#3B8763]
+                    "
+                  />
+
+                  <span
+                    className={`break-words text-sm sm:text-base ${
+                      task.completed
+                        ? "line-through text-[#8B978F]"
+                        : "text-[#1C231F]"
+                    }`}
+                  >
+                    {task.title}
+                  </span>
+                </label>
+
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  className="
+                    self-end
+                    rounded-lg
+                    border
+                    border-[#E5D4D1]
+                    px-3
+                    py-2
+                    text-xs
+                    font-medium
+                    text-[#A34E46]
+                    transition-colors
+                    hover:bg-[#F8ECEA]
+                    sm:self-auto
+                  "
+                >
+                  Eliminar
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

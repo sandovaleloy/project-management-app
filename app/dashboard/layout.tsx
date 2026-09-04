@@ -25,12 +25,11 @@ export default function DashboardLayout({
     <div
       className="
         min-h-screen
-        bg-slate-50
-
+        bg-[#FAF7F0]
         flex
         flex-col
-
         md:flex-row
+        font-[Inter,ui-sans-serif]
       "
     >
       {/* SIDEBAR */}
@@ -38,104 +37,132 @@ export default function DashboardLayout({
       <aside
         className="
           w-full
-
           md:w-72
           md:min-h-screen
 
-          bg-slate-900
-          text-white
+          bg-[#14231F]
+          text-[#F5F2EA]
 
           border-b
           md:border-b-0
           md:border-r
-
-          border-slate-800
+          border-[#26352F]
 
           p-5
+          md:p-6
+
+          flex
+          flex-col
         "
       >
-        <h1
-          className="
-            text-3xl
-            font-extrabold
-            text-blue-500
-          "
-        >
-          ⚡ TaskFlow
-        </h1>
+        {/* BRAND */}
 
-        <p className="text-slate-400 text-sm mt-1 mb-6">Task Management</p>
+        <div className="mb-8">
+          <h1
+            className="
+              text-3xl
+              font-[Fraunces,Georgia,serif]
+              tracking-tight
+              text-[#F5F2EA]
+            "
+          >
+            TaskFlow
+          </h1>
 
-        <nav
-          className="
-            flex
-            flex-col
+          <p
+            className="
+              text-sm
+              text-[#B9C4BC]
+              mt-1
+            "
+          >
+            Organiza. Completa. Avanza.
+          </p>
+        </div>
 
-            md:flex-col
+        {/* NAVIGATION */}
 
-            gap-3
-          "
-        >
+        <nav className="flex flex-col gap-2">
           <Link
             href="/dashboard"
             className="
               block
-
-              rounded-xl
-
-              bg-slate-800
-
+              rounded-lg
               px-4
               py-3
 
-              hover:bg-slate-700
+              bg-[#1C3029]
+              text-[#F5F2EA]
 
-              transition
+              hover:bg-[#264138]
+
+              transition-colors
             "
           >
-            📊 Dashboard
+            <span className="mr-2">📊</span>
+            Dashboard
           </Link>
 
           <Link
             href="/dashboard/projects"
             className="
               block
-
-              rounded-xl
-
-              bg-slate-800
-
+              rounded-lg
               px-4
               py-3
 
-              hover:bg-slate-700
+              bg-[#1C3029]
+              text-[#F5F2EA]
 
-              transition
+              hover:bg-[#264138]
+
+              transition-colors
             "
           >
-            📁 Proyectos
+            <span className="mr-2">📁</span>
+            Proyectos
           </Link>
 
           <button
             onClick={logout}
             className="
-              rounded-xl
-
-              bg-slate-800
-
+              rounded-lg
               px-4
               py-3
 
-              hover:bg-red-500
+              text-left
 
-              transition
+              bg-[#1C3029]
+              text-[#F5F2EA]
+
+              hover:bg-[#3A2928]
+
+              transition-colors
 
               mt-2
             "
           >
-            🚪 Cerrar sesión
+            <span className="mr-2">🚪</span>
+            Cerrar sesión
           </button>
         </nav>
+
+        {/* SIDEBAR FOOTER */}
+
+        <div
+          className="
+            hidden
+            md:block
+            mt-auto
+            pt-8
+          "
+        >
+          <p className="text-xs text-[#8B978F]">TaskFlow</p>
+
+          <p className="text-xs text-[#66736C] mt-1">
+            Tu espacio para organizar lo que sigue.
+          </p>
+        </div>
       </aside>
 
       {/* CONTENIDO */}
@@ -143,12 +170,13 @@ export default function DashboardLayout({
       <main
         className="
           flex-1
-
           min-w-0
 
           p-4
           sm:p-6
           lg:p-8
+
+          text-[#1C231F]
         "
       >
         {children}

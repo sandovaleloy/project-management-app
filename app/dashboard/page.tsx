@@ -1,63 +1,49 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import ProjectsList from "@/components/ProjectList"
-import Link from "next/link"
-import { toast } from "sonner"
+import { useEffect, useState } from "react";
+import ProjectsList from "@/components/ProjectList";
+import Link from "next/link";
+import { toast } from "sonner";
 
 interface Stats {
-  projects: number
-  tasks: number
-  doneTasks: number
-  inProgressTasks: number
+  projects: number;
+  tasks: number;
+  doneTasks: number;
+  inProgressTasks: number;
 }
 
 export default function DashboardPage() {
-
-  const [stats, setStats] = useState<Stats | null>(null)
+  const [stats, setStats] = useState<Stats | null>(null);
 
   useEffect(() => {
-
     const fetchDashboard = async () => {
-
       try {
-
-        const token = localStorage.getItem("token")
+        const token = localStorage.getItem("token");
 
         const res = await fetch("/api/dashboard", {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        const data = await res.json()
+        const data = await res.json();
 
-        setStats(data)
-
+        setStats(data);
       } catch (error) {
-
-        toast.error("Error al cargar el dashboard")
-
+        toast.error("Error al cargar el dashboard");
       }
+    };
 
-    }
+    fetchDashboard();
+  }, []);
 
-    fetchDashboard()
-
-  }, [])
-
-  const isFirstProject =
-  stats?.projects === 0 &&
-  stats?.tasks === 0
+  const isFirstProject = stats?.projects === 0 && stats?.tasks === 0;
 
   return (
-
     <div className="max-w-7xl mx-auto">
-
       {/* HEADER */}
 
       <div className="mb-10">
-
         <h1
           className="
             text-4xl
@@ -79,7 +65,6 @@ export default function DashboardPage() {
         >
           Resumen general de tus proyectos y tareas
         </p>
-
       </div>
 
       {/* CTA */}
@@ -92,8 +77,8 @@ export default function DashboardPage() {
           px-5
           py-3
           rounded-xl
-          bg-blue-600
-          hover:bg-blue-700
+          bg-[#14231F]
+          hover:bg-[#1C3029]
           text-white
           font-medium
           transition-all
@@ -115,7 +100,6 @@ export default function DashboardPage() {
           mt-10
         "
       >
-
         <div
           className="
             bg-white
@@ -130,7 +114,6 @@ export default function DashboardPage() {
             duration-300
           "
         >
-
           <h2
             className="
               text-slate-500
@@ -151,7 +134,6 @@ export default function DashboardPage() {
           >
             {stats?.projects ?? 0}
           </p>
-
         </div>
 
         <div
@@ -168,7 +150,6 @@ export default function DashboardPage() {
             duration-300
           "
         >
-
           <h2
             className="
               text-slate-500
@@ -189,7 +170,6 @@ export default function DashboardPage() {
           >
             {stats?.tasks ?? 0}
           </p>
-
         </div>
 
         <div
@@ -206,7 +186,6 @@ export default function DashboardPage() {
             duration-300
           "
         >
-
           <h2
             className="
               text-slate-500
@@ -227,7 +206,6 @@ export default function DashboardPage() {
           >
             {stats?.doneTasks ?? 0}
           </p>
-
         </div>
 
         <div
@@ -244,7 +222,6 @@ export default function DashboardPage() {
             duration-300
           "
         >
-
           <h2
             className="
               text-slate-500
@@ -265,17 +242,13 @@ export default function DashboardPage() {
           >
             {stats?.inProgressTasks ?? 0}
           </p>
-
         </div>
-
       </div>
 
-     {/* PROYECTOS */}
+      {/* PROYECTOS */}
 
       <div className="mt-12">
-
         {isFirstProject ? (
-
           <div
             className="
               bg-white
@@ -287,10 +260,7 @@ export default function DashboardPage() {
               text-center
             "
           >
-
-            <div className="text-5xl mb-4">
-              👋
-            </div>
+            <div className="text-5xl mb-4">👋</div>
 
             <h2
               className="
@@ -310,8 +280,8 @@ export default function DashboardPage() {
                 mx-auto
               "
             >
-              Aún no tienes proyectos.
-              Empieza creando el primero para organizar tu trabajo.
+              Aún no tienes proyectos. Empieza creando el primero para organizar
+              tu trabajo.
             </p>
 
             <Link
@@ -331,13 +301,9 @@ export default function DashboardPage() {
             >
               Crear mi primer proyecto
             </Link>
-
           </div>
-
         ) : (
-
           <>
-
             <h2
               className="
                 text-2xl
@@ -350,15 +316,9 @@ export default function DashboardPage() {
             </h2>
 
             <ProjectsList />
-
           </>
-
         )}
-
       </div>
-
     </div>
-
-  )
-
+  );
 }
